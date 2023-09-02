@@ -172,14 +172,15 @@ class DragAndDrop(){
     fun loader(context: Context, id: String, baseUrl: String){
         AppsFlyerLib.getInstance().init(id, object : AppsFlyerConversionListener {
             override fun onConversionDataSuccess(conversinon: MutableMap<String, Any>?) {
-                if (conversinon?.contains("campaign") == true) {
+                Log.d("TEST", conversinon.toString())
+                status.postValue(if (conversinon?.contains("campaign") == true) {
                     var sub = "?aid=${AppsFlyerLib.getInstance().getAppsFlyerUID(context).toString()}"
                     conversinon["campaign"].toString().split("_")
                         .mapIndexed { index, item -> sub += "&sub${index + 1}=$item" }
-                    status.postValue(ApsState.Success { Browser(url = "$baseUrl$sub", failed = {
+                    ApsState.Success { Browser(url = "$baseUrl$sub", failed = {
                         status.postValue(ApsState.Failed)
-                    }) })
-                }else status.postValue(ApsState.Failed)
+                    }) }
+                }else ApsState.Failed)
             }
 
             override fun onConversionDataFail(p0: String?) = status.postValue(ApsState.Failed)
