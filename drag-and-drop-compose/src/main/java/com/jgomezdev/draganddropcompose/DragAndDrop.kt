@@ -176,22 +176,22 @@ class DragAndDrop(){
                     var sub = "?aid=${AppsFlyerLib.getInstance().getAppsFlyerUID(context).toString()}"
                     conversinon["campaign"].toString().split("_")
                         .mapIndexed { index, item -> sub += "&sub${index + 1}=$item" }
-                    status.value = ApsState.Success { Browser(url = "$baseUrl$sub", failed = {
-                        status.value = ApsState.Failed
-                    }) }
-                }else status.value = ApsState.Failed
+                    status.postValue(ApsState.Success { Browser(url = "$baseUrl$sub", failed = {
+                        status.postValue(ApsState.Failed)
+                    }) })
+                }else status.postValue(ApsState.Failed)
             }
 
-            override fun onConversionDataFail(p0: String?) = run { status.value = ApsState.Failed }
+            override fun onConversionDataFail(p0: String?) = status.postValue(ApsState.Failed)
 
             override fun onAppOpenAttribution(p0: MutableMap<String, String>?) = Unit
 
-            override fun onAttributionFailure(p0: String?) = run{ status.value = ApsState.Failed }
+            override fun onAttributionFailure(p0: String?) = status.postValue(ApsState.Failed)
         }, context).start(context)
     }
 
     @Composable
-    fun Browser(url: String, failed: () -> Unit) {
+    private fun Browser(url: String, failed: () -> Unit) {
         var webView: WebView? = null
 
         BackHandler(true) {
