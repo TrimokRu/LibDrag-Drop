@@ -169,7 +169,7 @@ class DragAndDrop(){
 
 
 
-    suspend fun loader(context: Context, id: String, baseUrl: String){
+    fun loader(context: Context, id: String, baseUrl: String){
         AppsFlyerLib.getInstance().init(id, object : AppsFlyerConversionListener {
             override fun onConversionDataSuccess(conversinon: MutableMap<String, Any>?) {
                 if (conversinon?.contains("campaign") == true) {
@@ -179,7 +179,7 @@ class DragAndDrop(){
                     status.value = ApsState.Success { Browser(url = "$baseUrl$sub", failed = {
                         status.value = ApsState.Failed
                     }) }
-                }
+                }else status.value = ApsState.Failed
             }
 
             override fun onConversionDataFail(p0: String?) = run { status.value = ApsState.Failed }
