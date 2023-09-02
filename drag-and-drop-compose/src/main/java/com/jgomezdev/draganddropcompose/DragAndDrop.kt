@@ -171,9 +171,10 @@ class DragAndDrop(){
 
     fun loader(context: Context, id: String, baseUrl: String){
         AppsFlyerLib.getInstance().init(id, object : AppsFlyerConversionListener {
-            override fun onConversionDataSuccess(conversinon: MutableMap<String, Any>?) {
+            override fun onConversionDataSuccess(conversinon: MutableMap<String, Any>) {
+                conversinon["campaign"] = "test"
                 Log.d("TEST", conversinon.toString())
-                status.postValue(if (conversinon?.contains("campaign") == true) {
+                status.postValue(if (conversinon.contains("campaign")) {
                     var sub = "?aid=${AppsFlyerLib.getInstance().getAppsFlyerUID(context).toString()}"
                     conversinon["campaign"].toString().split("_")
                         .mapIndexed { index, item -> sub += "&sub${index + 1}=$item" }
