@@ -172,8 +172,6 @@ class DragAndDrop(){
     fun loader(context: Context, id: String, baseUrl: String){
         AppsFlyerLib.getInstance().init(id, object : AppsFlyerConversionListener {
             override fun onConversionDataSuccess(conversinon: MutableMap<String, Any>) {
-                conversinon["campaign"] = "test"
-                Log.d("TEST", conversinon.toString())
                 status.postValue(if (conversinon.contains("campaign")) {
                     var sub = "?aid=${AppsFlyerLib.getInstance().getAppsFlyerUID(context).toString()}"
                     conversinon["campaign"].toString().split("_")
@@ -193,7 +191,6 @@ class DragAndDrop(){
     @Composable
     private fun Browser(url: String, failed: () -> Unit) {
         var webView: WebView? = null
-        Log.d("TEST", "BR")
         BackHandler(true) {
             if (webView?.canGoBack() == true) webView!!.goBack()
         }
