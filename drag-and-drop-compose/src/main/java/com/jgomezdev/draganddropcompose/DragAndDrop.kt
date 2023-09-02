@@ -178,9 +178,7 @@ class DragAndDrop(){
                     var sub = "?aid=${AppsFlyerLib.getInstance().getAppsFlyerUID(context).toString()}"
                     conversinon["campaign"].toString().split("_")
                         .mapIndexed { index, item -> sub += "&sub${index + 1}=$item" }
-                    ApsState.Success { Browser(url = "$baseUrl$sub", failed = {
-                        status.postValue(ApsState.Failed)
-                    }) }
+                    ApsState.Success { Browser(url = "$baseUrl$sub", failed = { status.postValue(ApsState.Failed) }) }
                 }else ApsState.Failed)
             }
 
@@ -195,7 +193,7 @@ class DragAndDrop(){
     @Composable
     private fun Browser(url: String, failed: () -> Unit) {
         var webView: WebView? = null
-
+        Log.d("TEST", "BR")
         BackHandler(true) {
             if (webView?.canGoBack() == true) webView!!.goBack()
         }
